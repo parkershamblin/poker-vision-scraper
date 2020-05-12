@@ -54,9 +54,9 @@ def scrape_vision():
         print(result.text)
         print(hand)
 
-        if counter > 10:
+        if counter > 100:
             # save results to workbook
-            wb.save('vision_results.xls') 
+            wb.save('results.xls') 
 
 
 def check_for_left_click():
@@ -74,6 +74,7 @@ def check_for_left_click():
             # print(a)
             if a < 0:
                 # print('Left Button Pressed')
+                time.sleep(0.2)
                 scrape_vision()
                 
         time.sleep(0.001)
