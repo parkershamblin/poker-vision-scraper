@@ -11,50 +11,57 @@ driver = webdriver.Chrome(chromedriver_path)
 driver.implicitly_wait(1)
 driver.get('https://www.runitonce.com/vision/')
 
-
 # wait a bit so I can log into Run It Once
 time.sleep(45)
 
-
-# create excel workbook to store results
 wb = Workbook() 
-# add_sheet is used to create sheet. 
-sheet1 = wb.add_sheet('Sheet 1')
-# write column headers
-sheet1.write(0, 0, 'Hand') 
-sheet1.write(0, 1, 'Result') 
-# counter to enumerate results in workbook
+sheet1 = wb.add_sheet('100bb SRP COvsBTN')
+sheet1.write(0, 0, 'Board')
+sheet1.write(0, 1, 'Hand')
+sheet1.write(0, 2, 'Result') 
 counter = 1
 
 
+def reverse(s): 
+  string = "" 
+  for i in s: 
+    string = i + string
+  return string
+
+
 def scrape_vision():
+    scenario = driver.find_element_by_id('board-header').text
+    board = driver.find_element_by_class_name('board').get_attribute('data-texture')
+
     # find cards
     foo = driver.find_element_by_id('intro-text')
-    foo.find_elements_by_class_name('result-hand-graphical')
     cards = []  # store cards in empty list
 
     # grabs image file path for our cards
     for i in foo.find_elements_by_class_name('result-hand-graphical'):
         cards.append(i.get_attribute('src'))
 
-    # empty list to store hand
     hand = []
     for card in cards:
-        hand.append(card.replace(r"https://www.runitonce.com/static/img/visions/card-set/", "").replace(r".png?2.0", ""))
+        hand.append(card.replace(r"https://www.runitonce.com/static/img/visions/card-set/", "").replace(r".png?2.0", "").replace('/', ''))
+    # move suit to right side of card 
+    for card in range(len(hand)):
+        hand[card] = reverse(hand[card])
 
     # grab result and print text
     result = driver.find_element_by_id('practice-result')
     if result.text:
         # write results in workbook
         global counter
-        sheet1.write(counter, 0, hand)
-        sheet1.write(counter, 1, result.text)
+        sheet1.write(counter, 0, board)
+        sheet1.write(counter, 1, hand)
+        sheet1.write(counter, 2, result.text)
         counter += 1
         
         print(result.text)
         print(hand)
 
-        if counter > 100:
+        if counter > 25:
             # save results to workbook
             wb.save('results.xls') 
 
