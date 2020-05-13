@@ -2,8 +2,16 @@
 
 import time
 from selenium import webdriver
-import xlwt 
-from xlwt import Workbook
+from openpyxl import Workbook
+
+
+wb = Workbook()
+ws = wb.active
+ws.title = '100bb SRP COvsBTN'
+ws['A1'] = 'Board'
+ws['B1'] = 'Hand'
+ws['C1'] = 'Result'
+
 
 chromedriver_path = r"C:\Users\Parker\Desktop\chromedriver.exe"
 #create webdriver object and get url
@@ -13,13 +21,6 @@ driver.get('https://www.runitonce.com/vision/')
 
 # wait a bit so I can log into Run It Once
 time.sleep(45)
-
-wb = Workbook() 
-sheet1 = wb.add_sheet('100bb SRP COvsBTN')
-sheet1.write(0, 0, 'Board')
-sheet1.write(0, 1, 'Hand')
-sheet1.write(0, 2, 'Result') 
-counter = 1
 
 
 def reverse(s): 
@@ -47,23 +48,19 @@ def scrape_vision():
     # move suit to right side of card 
     for card in range(len(hand)):
         hand[card] = reverse(hand[card])
+    # covert hand from list to string
+    hand = ''.join(hand[:])
 
     # grab result and print text
     result = driver.find_element_by_id('practice-result')
     if result.text:
         # write results in workbook
-        global counter
-        sheet1.write(counter, 0, board)
-        sheet1.write(counter, 1, hand)
-        sheet1.write(counter, 2, result.text)
-        counter += 1
+        ws.append([board, hand, result.text])
+        # save results to workbook
+        wb.save('results.xlsx') 
         
         print(result.text)
         print(hand)
-
-        if counter > 25:
-            # save results to workbook
-            wb.save('results.xls') 
 
 
 def check_for_left_click():
