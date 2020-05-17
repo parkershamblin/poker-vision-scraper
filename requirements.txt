@@ -1,3 +1,4 @@
 selenium
 openpyxl
 pywin32
+bs4

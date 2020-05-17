@@ -1,6 +1,9 @@
 # Input your Run It Once Log In Details here.
-username_input = "ENTER YOUR USERNAME HERE"
-password_input = "ENTER YOUR PASSWORD HERE"
+username_input = "ENTER YOUR RUN IT ONCE USERNAME HERE"
+password_input = "ENTER YOUR RUN IT ONCE PASSWORD HERE"
+# Input the full file path to the chrome driver v81 exe you downloaded here.
+chromedriver_path = r"ENTER THE FULL FILE PATH TO 'chromedriver.exe' YOU DOWNLOADED HERE"
+
 
 import time
 import win32api
@@ -8,6 +11,7 @@ from os import path
 from selenium import webdriver
 from openpyxl import Workbook
 from openpyxl import load_workbook
+from bs4 import BeautifulSoup
 
 
 # Load workbook if it exist and if not create new workbook.
@@ -25,7 +29,7 @@ else:
     ws['E1'] = 'Result'
 
 
-chromedriver_path = r"C:\Users\Parker\Desktop\chromedriver.exe"
+
 #create webdriver object and get url
 driver = webdriver.Chrome(chromedriver_path)
 driver.implicitly_wait(1)
@@ -46,9 +50,8 @@ password.clear()
 password.send_keys(password_input)
 driver.find_element_by_class_name('login-btn').click()
 
-
 previous_result = ""
-
+previous_hand = ""
 
 def reverse(s): 
   string = "" 
@@ -82,28 +85,22 @@ def scrape_vision():
         # grab result and print text
         result = driver.find_element_by_id('practice-result')
         if result.text:
-
-            # prevents duplicate results being written to worksheet when a user clicks while on the results page
             global previous_result
-            if result.text != previous_result:
-                # TODO Fix issue with situation not being included in first hand result
-                # have to click on overview tab to get overview text
-                driver.find_element_by_id('overview-tab').click()
-                situation = driver.find_element_by_id('hand-graph-title-overview').text
-                # click back to situation tab so that user doesn't have to do it each time
-                driver.find_element_by_id('situation-tab').click()
-
-                # write results in workbook
-                ws.append([line, situation, board, hand, result.text])
-                # save results to workbook
-                wb.save('RIO-Vision-Results.xlsx') 
-
-                previous_result = result.text
-                
-                print(result.text)
-                print(hand)
+            global previous_hand
+            if previous_result != result.text and previous_hand != hand:
+                    html = driver.page_source
+                    parsed_html = BeautifulSoup(html, 'html.parser')
+                    situation = parsed_html.body.find('h5', {'id': 'hand-graph-title-overview'}).text
+                    ws.append([line, situation, board, hand, result.text])
+                    wb.save('RIO-Vision-Results.xlsx')
+                    previous_result = result
+                    previous_hand = hand
+                    print(situation)
+                    print(result.text)
+                    print(hand)
     except Exception as e:
         print(f"An error occured. Here is the error: {e}")
+        time.sleep(1)
         pass
 
 
@@ -120,7 +117,7 @@ def check_for_left_click():
             # print(a)
             if a < 0:
                 # print('Left Button Pressed')
-                time.sleep(0.05)
+                time.sleep(0.1)
                 scrape_vision()
                 
         time.sleep(0.001)
