@@ -5,7 +5,7 @@ Scraper for Run It Once [Vision](https://www.runitonce.com/vision/). This scrape
 # Instructions:
 1. Download the [vision-scraper repo](https://github.com/parkershamblin/vision-scraper/archive/master.zip).
 
-2. Download [Chrome Driver v81](https://chromedriver.storage.googleapis.com/index.html?path=81.0.4044.138/)
+2. Download [Chrome Driver v81](https://chromedriver.storage.googleapis.com/81.0.4044.138/chromedriver_win32.zip)
 
 3. Download the [lastest version Python](https://www.python.org/ftp/python/3.8.3/python-3.8.3-amd64.exe).
 
