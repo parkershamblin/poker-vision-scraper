@@ -1,8 +1,8 @@
 # Input the full file path to the chrome driver v81 exe you downloaded here.
-chromedriver_path = r"C:\Users\Parker\Desktop\chromedriver.exe"
+chromedriver_path = r"ENTER THE FULL FILE PATH TO 'chromedriver.exe' YOU DOWNLOADED HERE"
 # Input your Run It Once Log In Details here.
-username_input = "parkershamblin"
-password_input = "EF^U#1jvOT47&rc0"
+username_input = "ENTER YOUR RUN IT ONCE USERNAME HERE"
+password_input = "ENTER YOUR RUN IT ONCE PASSWORD HERE"
 
 import time
 import win32api
@@ -81,20 +81,21 @@ def scrape_vision():
 
         # grab result and print text
         result = driver.find_element_by_id('practice-result')
-        if result.text:
+        if result.text != "":
             global previous_result
             global previous_hand
             if previous_result != result.text and previous_hand != hand:
                     html = driver.page_source
                     parsed_html = BeautifulSoup(html, 'html.parser')
                     situation = parsed_html.body.find('h5', {'id': 'hand-graph-title-overview'}).text
-                    ws.append([line, situation, board, hand, result.text])
-                    wb.save('RIO-Vision-Results.xlsx')
-                    previous_result = result
-                    previous_hand = hand
-                    print(situation)
-                    print(result.text)
-                    print(hand)
+                    if situation != "":
+                        ws.append([line, situation, board, hand, result.text])
+                        wb.save('RIO-Vision-Results.xlsx')
+                        previous_result = result
+                        previous_hand = hand
+                        print(situation)
+                        print(result.text)
+                        print(hand)
     except Exception as e:
         print(f"An error occured. Here is the error: {e}")
         time.sleep(1)
