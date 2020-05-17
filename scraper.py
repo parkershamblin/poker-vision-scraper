@@ -58,15 +58,15 @@ def reverse(s):
 
 
 def scrape_vision():
-    line = driver.find_element_by_id('board-header').text
-    board = driver.find_element_by_class_name('board').get_attribute('data-texture')
-
-    # TODO Clean up the next 20 lines of code.
-    # find cards
-    intro = driver.find_element_by_id('intro-text')
-    cards = []  # store cards in empty list
-
     try:
+        line = driver.find_element_by_id('board-header').text
+        board = driver.find_element_by_class_name('board').get_attribute('data-texture')
+
+        # TODO Clean up the next 20 lines of code.
+        # find cards
+        intro = driver.find_element_by_id('intro-text')
+        cards = []  # store cards in empty list
+
         # grabs image file path for our cards
         for i in intro.find_elements_by_class_name('result-hand-graphical'):
             cards.append(i.get_attribute('src'))
@@ -81,14 +81,14 @@ def scrape_vision():
 
         # grab result and print text
         result = driver.find_element_by_id('practice-result')
-        if result.text != "":
+        if len(result.text) > 1:
             global previous_result
             global previous_hand
             if previous_result != result.text and previous_hand != hand:
                     html = driver.page_source
                     parsed_html = BeautifulSoup(html, 'html.parser')
                     situation = parsed_html.body.find('h5', {'id': 'hand-graph-title-overview'}).text
-                    if situation != "":
+                    if len(situation) > 1:
                         ws.append([line, situation, board, hand, result.text])
                         wb.save('RIO-Vision-Results.xlsx')
                         previous_result = result
@@ -97,7 +97,7 @@ def scrape_vision():
                         print(result.text)
                         print(hand)
     except Exception as e:
-        print(f"An error occured. Here is the error: {e}")
+        print(f"Error: {e}")
         time.sleep(1)
         pass
 
