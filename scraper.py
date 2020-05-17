@@ -1,8 +1,8 @@
 # Input the full file path to the chrome driver v81 exe you downloaded here.
-chromedriver_path = r"ENTER THE FULL FILE PATH TO 'chromedriver.exe' YOU DOWNLOADED HERE"
+chromedriver_path = r"C:\Users\Parker\Desktop\chromedriver.exe"
 # Input your Run It Once Log In Details here.
-username_input = "ENTER YOUR RUN IT ONCE USERNAME HERE"
-password_input = "ENTER YOUR RUN IT ONCE PASSWORD HERE"
+username_input = "parkershamblin"
+password_input = "EF^U#1jvOT47&rc0"
 
 import time
 import win32api
