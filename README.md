@@ -21,3 +21,7 @@ Scraper for Run It Once [Vision](https://www.runitonce.com/vision/). This scrape
 8. Next enter in your Run It Once username and password.
 
 9. Finally hit 'Ctrl + B' with Sublime Text open to run the scraper. It will log you in automatically and once you begin to play hands it will store the results in an excel file titled 'RIO-Vision-Results.xlsx', which will be stored in the vision-scraper repo folder that you installed in step 1.
+
+
+Your results should look something like the following:
+![image](https://user-images.githubusercontent.com/53675680/82147360-2fb3af80-981d-11ea-8aa2-861432a5e0a0.png)
