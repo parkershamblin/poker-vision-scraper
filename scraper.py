@@ -1,9 +1,8 @@
+# Input the full file path to the chrome driver v81 exe you downloaded here.
+chromedriver_path = r"ENTER THE FULL FILE PATH TO 'chromedriver.exe' YOU DOWNLOADED HERE"
 # Input your Run It Once Log In Details here.
 username_input = "ENTER YOUR RUN IT ONCE USERNAME HERE"
 password_input = "ENTER YOUR RUN IT ONCE PASSWORD HERE"
-# Input the full file path to the chrome driver v81 exe you downloaded here.
-chromedriver_path = r"ENTER THE FULL FILE PATH TO 'chromedriver.exe' YOU DOWNLOADED HERE"
-
 
 import time
 import win32api
@@ -36,12 +35,8 @@ driver.implicitly_wait(1)
 driver.get('https://www.runitonce.com/login/?next=/vision/')
 
 
-# wait a bit for Run It Once to load and allow us to login
-# if your computer or internet is slow you might want to increase
-# this number from 7 to 10-14
-time.sleep(7)
-
 # log into Run It Once
+time.sleep(7)  # wait for login page to load
 username = driver.find_element_by_id('login-username')
 username.clear()
 username.send_keys(username_input)
@@ -50,8 +45,10 @@ password.clear()
 password.send_keys(password_input)
 driver.find_element_by_class_name('login-btn').click()
 
+
 previous_result = ""
 previous_hand = ""
+
 
 def reverse(s): 
   string = "" 
@@ -64,23 +61,23 @@ def scrape_vision():
     line = driver.find_element_by_id('board-header').text
     board = driver.find_element_by_class_name('board').get_attribute('data-texture')
 
+    # TODO Clean up the next 20 lines of code.
     # find cards
-    foo = driver.find_element_by_id('intro-text')
+    intro = driver.find_element_by_id('intro-text')
     cards = []  # store cards in empty list
 
     try:
         # grabs image file path for our cards
-        for i in foo.find_elements_by_class_name('result-hand-graphical'):
+        for i in intro.find_elements_by_class_name('result-hand-graphical'):
             cards.append(i.get_attribute('src'))
 
         hand = []
         for card in cards:
             hand.append(card.replace(r"https://www.runitonce.com/static/img/visions/card-set/", "").replace(r".png?2.0", "").replace('/', ''))
-        # move suit to right side of card 
-        for card in range(len(hand)):
+
+        for card in range(len(hand)):  # move suit to right side of card 
             hand[card] = reverse(hand[card])
-        # covert hand from list to string
-        hand = ''.join(hand[:])
+        hand = ''.join(hand[:])  # covert hand from list to string
 
         # grab result and print text
         result = driver.find_element_by_id('practice-result')
@@ -105,21 +102,14 @@ def scrape_vision():
 
 
 def check_for_left_click():
-    # Code to check if left or right mouse buttons were pressed
-
-    state_left = win32api.GetKeyState(0x01)  # Left button down = 0 or 1. Button up = -127 or -128
-
+    state_left = win32api.GetKeyState(0x01)
     while True:
         a = win32api.GetKeyState(0x01)
-
         if a != state_left:  # Button state changed
             state_left = a
-            # print(a)
             if a < 0:
-                # print('Left Button Pressed')
                 time.sleep(0.1)
                 scrape_vision()
-                
         time.sleep(0.001)
 
 
