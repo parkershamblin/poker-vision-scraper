@@ -9,7 +9,7 @@ Scraper for Run It Once [Vision](https://www.runitonce.com/vision/). This scrape
 
 3. Download the [lastest version Python](https://www.python.org/ftp/python/3.8.3/python-3.8.3-amd64.exe).
 
-4. Download [Sublime Text 3](https://www.sublimetext.com/3).
+4. Download [Sublime Text 3 for Windows 64](https://download.sublimetext.com/Sublime%20Text%20Build%203211%20x64%20Setup.exe) or [Sublime Text 3 for Windows 32 bit](https://download.sublimetext.com/Sublime%20Text%20Build%203211%20Setup.exe).
 5. Open up the folder for this repo which you downloaded in step one and type 'cmd' in the search bar then run 'pip install -r requirements.txt'
 ![image](https://user-images.githubusercontent.com/53675680/82123878-ccb51080-9769-11ea-9555-d8cb93981946.png)
 ![image](https://user-images.githubusercontent.com/53675680/82123925-0128cc80-976a-11ea-9be0-12f373b5bd79.png)
