@@ -52,52 +52,38 @@ previous_hand = ""
 
 def reverse(s): 
   string = "" 
-  for i in s: 
+  for i in s:
     string = i + string
   return string
 
 
 def scrape_vision():
-    line = driver.find_element_by_id('board-header').text
-    board = driver.find_element_by_class_name('board').get_attribute('data-texture')
-
-    # TODO Clean up the next 20 lines of code.
-    # find cards
-    intro = driver.find_element_by_id('intro-text')
-    cards = []  # store cards in empty list
-
     try:
-        # grabs image file path for our cards
+        line = driver.find_element_by_id('board-header').text
+        board = driver.find_element_by_class_name('board').get_attribute('data-texture')
+        intro = driver.find_element_by_id('intro-text')
+
+        hand = ""
         for i in intro.find_elements_by_class_name('result-hand-graphical'):
-            cards.append(i.get_attribute('src'))
-
-        hand = []
-        for card in cards:
-            hand.append(card.replace(r"https://www.runitonce.com/static/img/visions/card-set/", "").replace(r".png?2.0", "").replace('/', ''))
-
-        for card in range(len(hand)):  # move suit to right side of card 
-            hand[card] = reverse(hand[card])
-        hand = ''.join(hand[:])  # covert hand from list to string
+            hand += reverse(i.get_attribute('src').replace(r"https://www.runitonce.com/static/img/visions/card-set/", "").replace(r".png?2.0", "").replace('/', ''))
 
         # grab result and print text
         result = driver.find_element_by_id('practice-result')
-        if result.text != "":
+        if len(result.text) > 1:
             global previous_result
             global previous_hand
             if previous_result != result.text and previous_hand != hand:
                     html = driver.page_source
                     parsed_html = BeautifulSoup(html, 'html.parser')
                     situation = parsed_html.body.find('h5', {'id': 'hand-graph-title-overview'}).text
-                    if situation != "":
+                    if len(situation) > 1:
                         ws.append([line, situation, board, hand, result.text])
                         wb.save('RIO-Vision-Results.xlsx')
                         previous_result = result
                         previous_hand = hand
-                        print(situation)
-                        print(result.text)
-                        print(hand)
+                        print(situation, result.text, hand, sep="\n")
     except Exception as e:
-        print(f"An error occured. Here is the error: {e}")
+        print(f"Error: {e}")
         time.sleep(1)
         pass
 
@@ -106,10 +92,10 @@ def check_for_left_click():
     state_left = win32api.GetKeyState(0x01)
     while True:
         a = win32api.GetKeyState(0x01)
-        if a != state_left:  # Button state changed
+        if a != state_left:
             state_left = a
             if a < 0:
-                time.sleep(0.1)
+                time.sleep(0.05)
                 scrape_vision()
         time.sleep(0.001)
 
