@@ -27,4 +27,4 @@ Your results should look something like the following:
 ![image](https://user-images.githubusercontent.com/53675680/82147360-2fb3af80-981d-11ea-8aa2-861432a5e0a0.png)
 
 # Issues
-1. It appears that if you click on "new hand" as soon as it appears on your screen the results text will not properly save to Excel. Try waiting at least one second after playing a hand before moving onto the next one.
+1. Try waiting at least one second after playing a hand before moving onto the next one because it appears that if you click on "new hand" as soon as it appears on your screen the results text will not properly save to Excel. 
